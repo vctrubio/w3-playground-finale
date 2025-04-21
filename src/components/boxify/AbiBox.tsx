@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useGame } from "../../hooks/useGame";
 import { Contract } from "../../lib/types";
 import {
     parseAndCategorizeAbi,
@@ -6,9 +7,21 @@ import {
     SolItemType,
     formatContractResponse,
 } from "../../lib/rpc-abi";
-import { EtherscanIcon, WarningIcon } from "../../lib/svgs";
-import { useGame } from "../../hooks/useGame";
 
+const EtherscanIcon = () => {
+    return (
+        <svg className="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M11.98 0L11.73 0.84V16.42L11.98 16.67L19.35 12.25L11.98 0Z" />
+            <path d="M11.98 0L4.61 12.25L11.98 16.67V8.93V0Z" />
+            <path d="M11.98 18.07L11.84 18.24V23.96L11.98 24L19.36 13.66L11.98 18.07Z" />
+            <path d="M11.98 24V18.07L4.61 13.66L11.98 24Z" />
+            <path d="M11.98 16.67L19.35 12.25L11.98 8.93V16.67Z" />
+            <path d="M4.61 12.25L11.98 16.67V8.93L4.61 12.25Z" />
+        </svg>
+    );
+};
+
+//qs: this can me moved to window.d.ts?
 interface ContractState {
     [functionName: string]: {
         functionSol: SolItem;
@@ -18,6 +31,22 @@ interface ContractState {
         trigger?: boolean;
     };
 }
+
+const ContractSection: React.FC<{
+    title: string;
+    children: React.ReactNode;
+    isEmpty: boolean;
+}> = ({ title, children, isEmpty }) => (
+    <div className="mb-4">
+        {isEmpty ? (
+            <p className="text-gray-600 dark:text-gray-400 italic pl-4">
+        // No {title.toLowerCase()} found.
+            </p>
+        ) : (
+            children
+        )}
+    </div>
+);
 
 const FunctionSignature: React.FC<{
     functionSol: SolItem;
@@ -145,6 +174,7 @@ const FunctionSignature: React.FC<{
             </div>
         );
     };
+
 
 const ContractFunction: React.FC<{
     functionName: string;
@@ -464,7 +494,6 @@ const ContractABI = ({
 const NoAbiProvided: React.FC = () => (
     <div className="max-w-4xl mx-auto p-6 bg-white dark:bg-gray-900 rounded-lg shadow-lg text-gray-800 dark:text-gray-200">
         <div className="flex flex-col items-center justify-center py-8">
-            {/* <WarningIcon className="h-16 w-16 text-red-600 dark:text-red-400 mb-4" /> */}
             <h2 className="text-2xl font-bold text-red-600 dark:text-red-400 mb-2">
                 No ABI Provided
             </h2>
@@ -489,7 +518,7 @@ const ContractHeader: React.FC<{ contract: Contract; name?: string }> = ({
                     rel="noopener noreferrer"
                     className="text-[#8839ef] hover:text-[#7287fd] dark:text-blue-400 dark:hover:text-blue-300 transition-colors font-medium flex items-center"
                 >
-                    {/* <EtherscanIcon /> */}
+                    <EtherscanIcon />
                     View on Etherscan
                 </a>
             </div>
@@ -497,13 +526,13 @@ const ContractHeader: React.FC<{ contract: Contract; name?: string }> = ({
     </div>
 );
 
+
+
 function AbiBox() {
     const { game } = useGame();
 
-    if (!game)
+    if (!game || !game.ContractForge || !game.ContractParent)
         return (<>nothing to see </>)
-
-    const userAddress = game.User.address || null;
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen w-full bg-gray-100 dark:bg-gray-900">
@@ -511,33 +540,17 @@ function AbiBox() {
                 <ContractABI
                     contract={game.ContractForge}
                     name="GamePlay"
-                    userAddress={userAddress}
+                    userAddress={game.User.address}
                 />
                 <ContractABI
                     contract={game.ContractParent}
                     name="ERC1155"
-                    userAddress={userAddress}
+                    userAddress={game.User.address}
                 />
             </div>
         </div>
     );
 }
 
-
-const ContractSection: React.FC<{
-    title: string;
-    children: React.ReactNode;
-    isEmpty: boolean;
-}> = ({ title, children, isEmpty }) => (
-    <div className="mb-4">
-        {isEmpty ? (
-            <p className="text-gray-600 dark:text-gray-400 italic pl-4">
-        // No {title.toLowerCase()} found.
-            </p>
-        ) : (
-            children
-        )}
-    </div>
-);
 
 export default AbiBox;
