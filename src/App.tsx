@@ -5,6 +5,8 @@ import { BoxContainer } from "./components/boxify/BoxInterface"
 import Logo from "./components/Logo"
 import UserBox from "./components/boxify/UserBox"
 import AbiBox from "./components/boxify/AbiBox"
+import Notifications from "./components/Notifications"
+import GameBox from "./components/boxify/GameBox"
 
 const boxModules: BoxProps[] = [
   {
@@ -26,7 +28,7 @@ const boxModules: BoxProps[] = [
   },
   {
     label: "Game",
-    component: Logo,
+    component: GameBox,
     theme: {
       dark: "bg-green-800",
       light: "bg-green-200",
@@ -48,6 +50,7 @@ function App() {
   return (
     <div className="flex flex-col items-center justify-center gap-4">
       <Navbar />
+      <Notifications />
       {game ?
         <div className="w-full max-w-4xl">
           <BoxContainer modules={boxModules} />
