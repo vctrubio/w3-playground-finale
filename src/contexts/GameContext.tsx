@@ -25,7 +25,8 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
-    window.gg = game;
+    // if (window)
+    //     window.gg = game;
 
     return (
         <GameContext.Provider value={{

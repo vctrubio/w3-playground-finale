@@ -3,11 +3,12 @@ import Login from "./components/Login"
 import { useGame } from "./hooks/useGame"
 import { BoxContainer } from "./components/boxify/BoxInterface"
 import Logo from "./components/Logo"
+import UserBox from "./components/boxify/UserBox"
 
 const boxModules: BoxProps[] = [
   {
     label: "User Profile",
-    component: Logo,
+    component: UserBox,
     theme: {
       dark: "bg-blue-600",
       light: "bg-blue-400",
