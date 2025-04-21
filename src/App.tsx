@@ -4,6 +4,7 @@ import { useGame } from "./hooks/useGame"
 import { BoxContainer } from "./components/boxify/BoxInterface"
 import Logo from "./components/Logo"
 import UserBox from "./components/boxify/UserBox"
+import AbiBox from "./components/boxify/AbiBox"
 
 const boxModules: BoxProps[] = [
   {
@@ -17,7 +18,7 @@ const boxModules: BoxProps[] = [
 
   {
     label: "Contract ABI",
-    component: Logo,
+    component: AbiBox,
     theme: {
       dark: "bg-blue-800",
       light: "bg-blue-200",
