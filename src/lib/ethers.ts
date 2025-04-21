@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { User } from "./types";
+import { Contract, User } from "./types";
 
 export function hasMetamask() {
   return (
@@ -7,7 +7,9 @@ export function hasMetamask() {
   );
 }
 
-async function getWalletByProvider(provider: ethers.BrowserProvider) {
+export async function getUserByProvider(
+  provider: ethers.BrowserProvider
+): Promise<User> {
   const signer = await provider.getSigner();
   const address = await signer.getAddress();
   const network = await provider.getNetwork();
@@ -17,6 +19,7 @@ async function getWalletByProvider(provider: ethers.BrowserProvider) {
   return {
     address,
     signer,
+    provider,
     network: {
       id: network.chainId.toString(),
       name: network.name,
@@ -26,22 +29,16 @@ async function getWalletByProvider(provider: ethers.BrowserProvider) {
   };
 }
 
-export async function getUserWallet(): Promise<User | null> {
-  if (!hasMetamask()) {
-    return null;
-  }
-
-  try {
-    const provider = new ethers.BrowserProvider(window.ethereum);
-    await provider.send("eth_requestAccounts", []);
-    const userWallet = await getWalletByProvider(provider);
-    return {
-      ...userWallet,
-      provider,
-      socket: undefined,
-    };
-  } catch (error) {
-    console.error("Error getting user wallet:", error);
-    return null;
-  }
+export async function getContract(
+  user: User,
+  address: string,
+  abi: ethers.InterfaceAbi
+): Promise<Contract> {
+  const contract = new ethers.Contract(address, abi, user.provider);
+  return {
+    address,
+    abi,
+    instance: contract,
+    chainId: user.network.id,
+  };
 }

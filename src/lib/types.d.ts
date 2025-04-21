@@ -10,13 +10,19 @@ export type User = {
   network: Network;
   signer: ethers.JsonRpcSigner;
   provider: ethers.BrowserProvider;
-  socket?: ethers.WebSocketProvider;
 };
 
 export type Contract = {
   address: string;
   abi: ethers.InterfaceAbi;
   instance: ethers.Contract;
-  chainId?: number;
+  chainId?: string;
   name?: string;
+};
+
+export type GameTheory = {
+  User: User;
+  ContractParent: Contract;
+  ContractForge: Contract;
+  ContractSocket: Contract;
 };

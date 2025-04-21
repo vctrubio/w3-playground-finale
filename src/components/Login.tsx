@@ -1,14 +1,28 @@
-import { useUser } from "../hooks/useUser";
 import { hasMetamask } from "../lib/ethers";
+import { useGame } from "../hooks/useGame";
 
 function Login() {
-    const { loginWithGameContract } = useUser();
+    const { initGameTheory } = useGame();
 
     return (
         <div className="flex flex-col items-center justify-center gap-4">
-            <button className="p-2 border rounded-xl">
-                Login button here
-            </button>
+            {hasMetamask() ? (
+                <button
+                    className="p-2 border rounded-xl"
+                    onClick={initGameTheory}
+                >
+                    Connect with Metamask
+                </button>
+            ) : (
+                <a
+                    href="https://metamask.io/download/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 border rounded-xl text-center"
+                >
+                    Download Metamask to enter the blockchain
+                </a>
+            )}
         </div>
     );
 }
