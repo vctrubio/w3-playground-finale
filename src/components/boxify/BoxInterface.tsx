@@ -36,7 +36,7 @@ function Box({
 
 export function BoxContainer({ modules }: { modules: BoxProps[] }): JSX.Element {
   return (
-    <div className=''>
+    <div>
       {modules.map((module) => (
         <Box key={module.id} {...module} />
       ))}

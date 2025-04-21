@@ -28,6 +28,20 @@ export async function getUserByProvider(
   };
 }
 
+export async function getWallet(): Promise<User | null> {
+  if (!hasMetamask()) return null;
+
+  try {
+    const provider = new ethers.BrowserProvider(window.ethereum!);
+    await provider.send("eth_requestAccounts", []);
+
+    return await getUserByProvider(provider);
+  } catch (error) {
+    console.error("Error creating provider:", error);
+    return null;
+  }
+}
+
 export async function getContract(
   user: User,
   address: string,
