@@ -2,15 +2,49 @@
 
 /* pseudo-class */
 :root {
-  font-family: monospace;
-  line-height: 1.5;
-  font-weight: 400;
+  /* Theme variables */
+  --bg-color: theme("colors.white");
+  --fg-color: theme("colors.gray.900");
 
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
 
+  /* idk what any of this does */
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Dark mode variables */
+html.dark {
+  --bg-color: theme("colors.gray.900");
+  --fg-color: theme("colors.gray.100");
+}
+
+/* tailwind v4 depreciated the tailwind.config.js file, so we are using the new @tailwind directive to import the base, components, and utilities styles. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Add background color styles for html and body elements */
+html,
+body {
+  background-color: var(--bg-color);
+  color: var(--fg-color);
+  @apply transition-colors duration-300;
+}
+
+@layer utilities {
+  .animate-navbar-dropdown {
+    animation: navbar-dropdown 0.4s ease-in-out forwards;
+  }
+
+  @keyframes navbar-dropdown {
+    0% {
+      opacity: 0;
+      transform: translateY(-100%);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }

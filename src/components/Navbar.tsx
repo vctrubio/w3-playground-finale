@@ -17,7 +17,7 @@ import Logo from "./Logo";
 
 export function Navbar() {
     return (
-        <nav className="w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white shadow p-4 transition-colors">
+        <nav className="w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white shadow p-4 transition-colors animate-navbar-dropdown">
             <div className="container mx-auto flex justify-between items-center">
                 <Logo />
                 {/* <NavButton /> */}
