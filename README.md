@@ -15,5 +15,7 @@
 - env variables
   --.env
   --.env.example
+  -tailwind v4
+  --index.css @variabes, html element, bg/fg theme
 
 ## User Arquitechture
