@@ -1,9 +1,10 @@
 import { createContext } from 'react';
-import { User } from '../lib/types';
+import { User, Contract } from '../lib/types';
 
 interface UserContextType {
     user: User | null;
-    test: string;
+    loginWithGameContract: () => void; //qs: or should it be Promise<void>;
+    contract: Contract;
 }
 
 export const UserContext = createContext<UserContextType | null>(null);

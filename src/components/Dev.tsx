@@ -1,9 +1,8 @@
 import { useUser } from "../hooks/useUser";
 
 function Dev() {
-    const { user, test } = useUser();
+    const { user, loginWithGameContract } = useUser();
     console.log("user", user);
-    console.log("test", test);
     return (
         <div>
             <h1>Dev</h1>
@@ -16,6 +15,7 @@ function Dev() {
                     <h2>No User</h2>
                 </div>
             )}
+            <button onClick={loginWithGameContract}>Login with Game Contract</button>
         </div>
     );
 }
