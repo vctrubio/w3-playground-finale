@@ -1,5 +1,4 @@
 import { useState, ReactNode, useEffect } from 'react';
-import { GameTheory } from '../lib/types';
 import { GameContext } from './GameContextDef';
 import { initGameTheory } from '../lib/gameTheory';
 

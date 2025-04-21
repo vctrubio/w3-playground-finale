@@ -1,10 +1,4 @@
 import { useNotifications } from '../hooks/useNotifications';
-export interface Notification {
-  id: string;
-  message: string;
-  type: NotificationType;
-  duration: number;
-}
 
 export default function Notifications() {
   const { notifications, removeNotification } = useNotifications();

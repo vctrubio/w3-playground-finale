@@ -223,14 +223,14 @@ const ContractFunction: React.FC<{
 
         if (solItem.inputs.length > 0) {
             const currentArgs = funcState.args || {};
-            const missingArgs = solItem.inputs.filter((input, idx) => {
+            const missingArgs = solItem.inputs.filter((input: any, idx: any) => {
                 const paramKey = input.name || `param${idx}`;
                 return !currentArgs[paramKey] || currentArgs[paramKey].trim() === "";
             });
 
             if (missingArgs.length > 0) {
                 const missingNames = missingArgs
-                    .map((input) => input.name || "unnamed parameter")
+                    .map((input: any) => input.name || "unnamed parameter")
                     .join(", ");
                 setContractState((prev) => {
                     const newState = { ...prev };
@@ -337,12 +337,14 @@ const ContractABI = ({
 
     useEffect(() => {
         const triggeredContract = Object.entries(contractState).find(
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             ([_, state]) => state.trigger === true,
         );
 
         if (triggeredContract) {
             runExecute(triggeredContract);
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [contractState]);
 
     if (!contract || !contract.abi) {
@@ -361,7 +363,7 @@ const ContractABI = ({
         // console.log('Arguments:', funcState.args);
 
         try {
-            const args = funcState.functionSol.inputs.map((input, idx) => {
+            const args = funcState.functionSol.inputs.map((input: any, idx: any) => {
                 const paramKey = input.name || `param${idx}`;
                 return funcState.args?.[paramKey] || "";
             });

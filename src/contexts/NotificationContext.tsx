@@ -1,9 +1,8 @@
 import { useState, ReactNode } from 'react';
-import { Notification } from '../components/Notifications';
 import { NotificationContext } from './NotificationContextDef';
 
 export const NotificationProvider = ({ children }: { children: ReactNode }) => {
-    const [notifications, setNotifications] = useState<Notification[]>([]);
+    const [notifications, setNotifications] = useState<MyNotification[]>([]);
 
     const showNotification = (message: string, type: NotificationType = "info", duration = 3000) => {
         const id = Math.random().toString(36).substring(2, 9);

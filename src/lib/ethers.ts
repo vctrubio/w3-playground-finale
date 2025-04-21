@@ -1,5 +1,4 @@
 import { ethers } from "ethers";
-import { Contract, User } from "./types";
 
 export function hasMetamask() {
   return (

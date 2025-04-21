@@ -1,10 +1,10 @@
-import { RawEvent } from "./types";
+import { GameEvent } from "./game";
 
 /**
  * Calculate token balances from raw events for a specific address or all addresses
  */
 export function calculateTokenBalances(
-  events: RawEvent[],
+  events: GameEvent[],
   address?: string
 ): Record<number, number> {
   const balanceMap: Record<number, number> = {};
@@ -35,7 +35,7 @@ export function calculateTokenBalances(
  * Get balance for a specific token and address
  */
 export function getTokenBalance(
-  events: RawEvent[],
+  events: GameEvent[],
   tokenId: number,
   address: string
 ): number {
@@ -71,7 +71,7 @@ export function formatTokenBalance(balance: number): string {
  * Calculate total tokens by address from raw events
  */
 export function getEventResult(
-  events: RawEvent[]
+  events: GameEvent[]
 ): { address: string; tokenId: number; total: number }[] {
   const balanceMap: Record<string, Record<number, number>> = {};
 

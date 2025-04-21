@@ -1,6 +1,5 @@
 import { ethers } from "ethers";
 import { hasMetamask, getContract, getUserByProvider } from "./ethers";
-import { GameTheory, User, Contract } from "./types";
 import ErikContract from "../../contracts/Erik.json";
 import ErikForge from "../../contracts/ErikForge.json";
 

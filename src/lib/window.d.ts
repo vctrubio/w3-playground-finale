@@ -22,3 +22,11 @@ interface ContractState {
     trigger?: boolean;
   };
 }
+
+//MyNotification ≠ Notification from react-notifications
+interface MyNotification {
+  id: string;
+  message: string;
+  type: NotificationType;
+  duration: number;
+}

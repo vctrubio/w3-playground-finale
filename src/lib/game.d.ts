@@ -8,7 +8,7 @@ interface TokenOwnerships {
   [tokenId: number]: TokenOwnership[];
 }
 
-interface GameEvent {
+export interface GameEvent {
   address: string;
   tokenId: number;
   amount: number;

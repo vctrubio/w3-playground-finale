@@ -1,5 +1,4 @@
 import { createContext } from 'react';
-import { GameTheory } from '../lib/types';
 
 interface GameContextType {
     game: GameTheory | null;

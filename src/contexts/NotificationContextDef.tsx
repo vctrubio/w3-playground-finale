@@ -1,8 +1,8 @@
 import { createContext } from 'react';
-import { Notification, NotificationType } from '../lib/types';
+
 
 interface NotificationContextType {
-  notifications: Notification[];
+  notifications: MyNotification[];
   showNotification: (message: string, type: NotificationType, duration?: number) => void;
   removeNotification: (id: string) => void;
 }
