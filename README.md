@@ -12,5 +12,8 @@
   -- file configuration
   -- tsoncfig.app.json (for browser)
   -- eslint (for any declaration headaches)
+- env variables
+  --.env
+  --.env.example
 
 ## User Arquitechture
