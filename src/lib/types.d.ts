@@ -1,6 +1,6 @@
 export type Network = {
   name: string;
-  id: number;
+  id: string;
   balance: string;
   currency: string;
 };

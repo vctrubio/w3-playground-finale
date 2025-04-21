@@ -32,10 +32,6 @@ body {
   @apply transition-colors duration-300;
 }
 
-button {
-  @apply border p-2;
-}
-
 @layer utilities {
   .animate-navbar-dropdown {
     animation: navbar-dropdown 0.4s ease-in-out forwards;
