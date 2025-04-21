@@ -1,4 +1,10 @@
 import { useNotifications } from '../hooks/useNotifications';
+export interface Notification {
+  id: string;
+  message: string;
+  type: NotificationType;
+  duration: number;
+}
 
 export default function Notifications() {
   const { notifications, removeNotification } = useNotifications();
@@ -9,19 +15,19 @@ export default function Notifications() {
     <div className="fixed top-4 right-4 z-50 flex flex-col gap-2 max-w-md">
       {notifications.map(notification => {
         // Set colors based on notification type
-        const bgColor = 
+        const bgColor =
           notification.type === 'success' ? 'bg-green-500 dark:bg-green-600' :
-          notification.type === 'error' ? 'bg-red-500 dark:bg-red-600' :
-          notification.type === 'warning' ? 'bg-yellow-500 dark:bg-yellow-600' :
-          'bg-blue-500 dark:bg-blue-600';
+            notification.type === 'error' ? 'bg-red-500 dark:bg-red-600' :
+              notification.type === 'warning' ? 'bg-yellow-500 dark:bg-yellow-600' :
+                'bg-blue-500 dark:bg-blue-600';
 
         return (
-          <div 
+          <div
             key={notification.id}
             className={`${bgColor} text-white p-4 rounded shadow-lg flex justify-between items-start animate-fade-in`}
           >
             <p className="flex-1">{notification.message}</p>
-            <button 
+            <button
               onClick={() => removeNotification(notification.id)}
               className="ml-4 text-white hover:text-gray-200"
               aria-label="Close notification"

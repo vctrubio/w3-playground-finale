@@ -40,7 +40,7 @@ function GameBox() {
         <div key={item.id} className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 border border-gray-200 dark:border-gray-700">
           <h3 className="font-bold text-lg mb-2">{item.name}</h3>
           <p className="text-gray-600 dark:text-gray-300 mb-4">{item.description}</p>
-          <button 
+          <button
             onClick={() => handleMintToken(item.id)}
             disabled={isLoading}
             className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded disabled:opacity-50 transition-colors"

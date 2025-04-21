@@ -1,4 +1,4 @@
-// if not file.d.ts, typescriupt will not recognize this file as a type definition file, and throw errors in ethers.js for example
+// this is global without needed of declaration
 interface Window {
   ethereum?: any;
 }
@@ -11,4 +11,16 @@ interface BoxProps {
     light: string;
   };
   [key: string]: any;
+}
+
+
+
+interface ContractState {
+  [functionName: string]: {
+    functionSol: SolItem;
+    args?: Record<string, string>;
+    loading: boolean;
+    response?: string;
+    trigger?: boolean;
+  };
 }

@@ -1,12 +1,15 @@
-import { RawEvent, Token, getTokenById } from '@/lib/types';
+import { RawEvent } from "./types";
 
 /**
  * Calculate token balances from raw events for a specific address or all addresses
  */
-export function calculateTokenBalances(events: RawEvent[], address?: string): Record<number, number> {
+export function calculateTokenBalances(
+  events: RawEvent[],
+  address?: string
+): Record<number, number> {
   const balanceMap: Record<number, number> = {};
 
-  events.forEach(event => {
+  events.forEach((event) => {
     // Skip if we're filtering by address and this event is for a different address
     if (address && event.address.toLowerCase() !== address.toLowerCase()) {
       return;
@@ -18,9 +21,9 @@ export function calculateTokenBalances(events: RawEvent[], address?: string): Re
       balanceMap[tokenId] = 0;
     }
 
-    if (type === 'mint') {
+    if (type === "mint") {
       balanceMap[tokenId] += amount;
-    } else if (type === 'burn') {
+    } else if (type === "burn") {
       balanceMap[tokenId] -= amount;
     }
   });
@@ -31,21 +34,28 @@ export function calculateTokenBalances(events: RawEvent[], address?: string): Re
 /**
  * Get balance for a specific token and address
  */
-export function getTokenBalance(events: RawEvent[], tokenId: number, address: string): number {
+export function getTokenBalance(
+  events: RawEvent[],
+  tokenId: number,
+  address: string
+): number {
   let balance = 0;
-  
-  events.forEach(event => {
-    if (event.address.toLowerCase() !== address.toLowerCase() || event.tokenId !== tokenId) {
+
+  events.forEach((event) => {
+    if (
+      event.address.toLowerCase() !== address.toLowerCase() ||
+      event.tokenId !== tokenId
+    ) {
       return;
     }
-    
-    if (event.type === 'mint') {
+
+    if (event.type === "mint") {
       balance += event.amount;
-    } else if (event.type === 'burn') {
+    } else if (event.type === "burn") {
       balance -= event.amount;
     }
   });
-  
+
   return balance;
 }
 
@@ -53,17 +63,19 @@ export function getTokenBalance(events: RawEvent[], tokenId: number, address: st
  * Format token balance for display
  */
 export function formatTokenBalance(balance: number): string {
-  if (balance <= 0) return '';
-  return balance === 1 ? '1 token' : `${balance} tokens`;
+  if (balance <= 0) return "";
+  return balance === 1 ? "1 token" : `${balance} tokens`;
 }
 
 /**
  * Calculate total tokens by address from raw events
  */
-export function getEventResult(events: RawEvent[]): { address: string; tokenId: number; total: number }[] {
+export function getEventResult(
+  events: RawEvent[]
+): { address: string; tokenId: number; total: number }[] {
   const balanceMap: Record<string, Record<number, number>> = {};
 
-  events.forEach(event => {
+  events.forEach((event) => {
     const { address, tokenId, amount, type } = event;
 
     if (!balanceMap[address]) {
@@ -74,9 +86,9 @@ export function getEventResult(events: RawEvent[]): { address: string; tokenId: 
       balanceMap[address][tokenId] = 0;
     }
 
-    if (type === 'mint') {
+    if (type === "mint") {
       balanceMap[address][tokenId] += amount;
-    } else if (type === 'burn') {
+    } else if (type === "burn") {
       balanceMap[address][tokenId] -= amount;
     }
   });
@@ -88,7 +100,7 @@ export function getEventResult(events: RawEvent[]): { address: string; tokenId: 
       result.push({
         address,
         tokenId: Number(tokenId),
-        total
+        total,
       });
     });
   });
@@ -99,10 +111,12 @@ export function getEventResult(events: RawEvent[]): { address: string; tokenId: 
 /**
  * Group events by token ID
  */
-export function getEventsByTokenId(events: { address: string; tokenId: number; total: number }[]): Record<number, { address: string; total: number }[]> {
+export function getEventsByTokenId(
+  events: { address: string; tokenId: number; total: number }[]
+): Record<number, { address: string; total: number }[]> {
   const tokenMap: Record<number, { address: string; total: number }[]> = {};
 
-  events.forEach(event => {
+  events.forEach((event) => {
     const { tokenId, address, total } = event;
 
     if (!tokenMap[tokenId]) {
@@ -113,7 +127,7 @@ export function getEventsByTokenId(events: { address: string; tokenId: number; t
     if (total > 0) {
       tokenMap[tokenId].push({
         address,
-        total
+        total,
       });
     }
   });

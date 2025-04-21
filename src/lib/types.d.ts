@@ -1,18 +1,18 @@
-export type Network = {
+type Network = {
   name: string;
   id: string;
   balance: string;
   currency: string;
 };
 
-export type User = {
+type User = {
   address: string;
   network: Network;
   signer: ethers.JsonRpcSigner;
   provider: ethers.BrowserProvider;
 };
 
-export type Contract = {
+type Contract = {
   address: string;
   abi: ethers.InterfaceAbi;
   instance: ethers.Contract;
@@ -20,18 +20,11 @@ export type Contract = {
   name?: string;
 };
 
-export type GameTheory = {
+type GameTheory = {
   User: User;
   ContractParent: Contract;
   ContractForge: Contract;
   ContractSocket: Contract;
 };
 
-export type NotificationType = "success" | "error" | "warning" | "info";
-
-export interface Notification {
-  id: string;
-  message: string;
-  type: NotificationType;
-  duration: number;
-}
+type NotificationType = "success" | "error" | "warning" | "info";

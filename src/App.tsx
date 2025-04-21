@@ -7,6 +7,7 @@ import UserBox from "./components/boxify/UserBox"
 import AbiBox from "./components/boxify/AbiBox"
 import Notifications from "./components/Notifications"
 import GameBox from "./components/boxify/GameBox"
+import { useEffect } from "react"
 
 const boxModules: BoxProps[] = [
   {
@@ -27,6 +28,14 @@ const boxModules: BoxProps[] = [
     },
   },
   {
+    label: "Contract Events",
+    component: Logo,
+    theme: {
+      dark: "bg-purple-800",
+      light: "bg-purple-200",
+    },
+  },
+  {
     label: "Game",
     component: GameBox,
     theme: {
@@ -34,18 +43,20 @@ const boxModules: BoxProps[] = [
       light: "bg-green-200",
     },
   },
-  {
-    label: "Contract Events",
-    component: Logo,
-    theme: {
-      dark: "bg-purple-800",
-      light: "bg-purple-200",
-    },
-  }
 ]
 
 function App() {
-  const { game } = useGame()
+  const { game, initGameTheory } = useGame()
+
+  //for dev purposes
+  useEffect(() => {
+    const init = async () => {
+      await initGameTheory()
+    }
+
+    init()
+  }, [])
+
 
   return (
     <div className="flex flex-col items-center justify-center gap-4">

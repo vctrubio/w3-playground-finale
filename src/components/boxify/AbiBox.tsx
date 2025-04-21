@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useGame } from "../../hooks/useGame";
-import { Contract } from "../../lib/types";
 import {
     parseAndCategorizeAbi,
     SolItem,
@@ -20,17 +19,6 @@ const EtherscanIcon = () => {
         </svg>
     );
 };
-
-//qs: this can me moved to window.d.ts?
-interface ContractState {
-    [functionName: string]: {
-        functionSol: SolItem;
-        args?: Record<string, string>;
-        loading: boolean;
-        response?: string;
-        trigger?: boolean;
-    };
-}
 
 const ContractSection: React.FC<{
     title: string;
