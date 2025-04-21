@@ -1,4 +1,22 @@
-// to be tested
+//to be testted tokenownership
+interface TokenOwnership {
+  address: string;
+  total: number;
+}
+
+interface TokenOwnerships {
+  [tokenId: number]: TokenOwnership[];
+}
+
+interface GameEvent {
+  address: string;
+  tokenId: number;
+  amount: number;
+  type: "mint" | "burn";
+  transactionHash?: string;
+  blockNumber?: number;
+}
+
 interface GameToken {
   id: number;
   name: string;
@@ -6,7 +24,7 @@ interface GameToken {
   description: string;
 }
 
-const TOKENS: GameToken[] = [
+export const TOKENS: GameToken[] = [
   { id: 0, name: "SEED", color: "#E0115F", description: "Free mint" },
   { id: 1, name: "WATER", color: "#0F52BA", description: "Free mint" },
   { id: 2, name: "SOIL", color: "#50C878", description: "Free mint" },

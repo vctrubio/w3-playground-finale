@@ -13,7 +13,7 @@ function Box({
   };
 
   return (
-    <div className="relative border p-4 rounded m-8 min-h-20">
+    <div className="relative border p-4 rounded m-8 min-h-20 border-gray-200 dark:border-gray-700">
       <div
         className={`absolute left-2 top-0 -mt-5 z-10 p-2 border rounded cursor-pointer ${theme.light} dark:${theme.dark} dark:text-zinc-800 text-orange-500 text-xl font-bold`}
         onClick={toggleVisibility}
@@ -26,7 +26,7 @@ function Box({
           : 'opacity-0 max-h-0 overflow-hidden'
           }`}
       >
-        <div className="mt-6 overflow-y-auto max-h-[1000px]">
+        <div className="mt-6 overflow-y-auto max-h-[800px]">
           <Component {...componentProps} />
         </div>
       </div>

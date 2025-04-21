@@ -13,8 +13,6 @@ interface BoxProps {
   [key: string]: any;
 }
 
-
-
 interface ContractState {
   [functionName: string]: {
     functionSol: SolItem;

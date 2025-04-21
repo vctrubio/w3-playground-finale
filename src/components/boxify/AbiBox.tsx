@@ -524,10 +524,10 @@ function AbiBox() {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen w-full bg-gray-100 dark:bg-gray-900">
-            <div className="w-full max-w-4xl px-4">
+            <div className="w-full max-w-4xl">
                 <ContractABI
                     contract={game.ContractForge}
-                    name="GamePlay"
+                    name="ERC115ForgeLogic"
                     userAddress={game.User.address}
                 />
                 <ContractABI
