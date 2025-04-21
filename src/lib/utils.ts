@@ -1,4 +1,10 @@
-import { GameEvent } from "./game";
+import { GameEvent, GameToken, TOKENS } from "./game";
+
+export function getTokenById(id: number): GameToken | null {
+  const token = TOKENS.find((t) => t.id === id);
+
+  return token ? token : null;
+}
 
 /**
  * Calculate token balances from raw events for a specific address or all addresses
