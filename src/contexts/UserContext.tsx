@@ -1,13 +1,6 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { ethers } from 'ethers';
-import { User, Contract } from '../lib/types';
-
-interface UserContextType {
-    user: User | null;
-    test: string;
-}
-
-export const UserContext = createContext<UserContextType | null>(null);
+import React, { useState, ReactNode, useEffect } from 'react';
+import { User } from '../lib/types';
+import { UserContext } from './UserContextDef';
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);

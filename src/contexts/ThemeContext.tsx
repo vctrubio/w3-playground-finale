@@ -1,24 +1,7 @@
-import { createContext, useState, useEffect, ReactNode, useContext } from "react";
+import { useState, useEffect, ReactNode } from "react";
+import { ThemeContext, Theme } from "./ThemeContextDef";
 
-type Theme = "light" | "dark";
-
-interface ThemeContextType {
-  theme: Theme;
-  toggleTheme: () => void;
-}
-
-const ThemeContext = createContext<ThemeContextType>({
-  theme: "light",
-  toggleTheme: () => { },
-});
-
-export const useTheme = () => useContext(ThemeContext);
-
-interface ThemeProviderProps {
-  children: ReactNode;
-}
-
-export const ThemeProvider = ({ children }: ThemeProviderProps) => {
+export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   // Initialize theme from localStorage or system preference
   const [theme, setTheme] = useState<Theme>(() => {
     // Check if theme is stored in localStorage
