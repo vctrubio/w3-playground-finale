@@ -6,6 +6,8 @@ import { GameProvider } from './contexts/GameContext';
 function App() {
   const { game } = useGame()
 
+  window.gg = game;
+  
   return (
     <GameProvider>
       <div className="flex flex-col items-center justify-center gap-4">

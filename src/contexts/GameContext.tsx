@@ -10,6 +10,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         console.log("GameProvider mounted");
     }, []);
 
+
     const handleInitGameTheory = async (): Promise<GameTheory | null> => {
         try {
             const gameTheory = await initGameTheory();
@@ -23,6 +24,8 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
             return null;
         }
     };
+
+    window.gb = game;
 
     return (
         <GameContext.Provider value={{

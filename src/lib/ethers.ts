@@ -39,6 +39,5 @@ export async function getContract(
     address,
     abi,
     instance: contract,
-    chainId: user.network.id,
   };
 }

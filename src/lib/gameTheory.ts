@@ -12,6 +12,7 @@ async function getContractParent(user: User): Promise<Contract> {
   );
   return {
     ...contract,
+    chainId: ErikContract.chainId,
     name: ErikContract.name,
   };
 }
@@ -20,6 +21,7 @@ async function getContractForge(user: User): Promise<Contract> {
   const contract = await getContract(user, ErikForge.address, ErikForge.abi);
   return {
     ...contract,
+    chainId: ErikForge.chainId,
     name: ErikForge.name,
   };
 }
