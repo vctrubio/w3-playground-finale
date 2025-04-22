@@ -15,10 +15,13 @@ function Box({
   return (
     <div className="relative border p-4 rounded m-8 min-h-20 border-gray-200 dark:border-gray-700">
       <div
-        className={`absolute left-2 top-0 -mt-5 z-10 p-2 border rounded cursor-pointer ${theme.light} dark:${theme.dark} dark:text-zinc-800 text-orange-500 text-xl font-bold`}
+        className={`absolute left-2 top-0 -mt-5 p-2 border rounded cursor-pointer ${theme.light} dark:${theme.dark} dark:text-zinc-800 text-rose-900 text-xl font-bold`}
         onClick={toggleVisibility}
       >
-        {label} {isVisible ? '[X]' : '▶'}
+        {label}
+        <span className='ml-2 hover:text-black dark:hover:text-orange-400 transition duration-500'>
+          {isVisible ? '[X]' : '▶'}
+        </span>
       </div>
       <div
         className={`pt-4 transition-all duration-300 ease-in-out ${isVisible

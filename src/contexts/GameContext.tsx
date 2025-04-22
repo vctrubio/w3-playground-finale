@@ -105,7 +105,8 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     return (
         <GameContext.Provider value={{
             game,
-            initGameTheory: handleInitGameTheory
+            initGameTheory: handleInitGameTheory,
+            networkId: game?.User?.network.id,
         }}>
             {children}
         </GameContext.Provider>

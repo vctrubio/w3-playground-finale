@@ -13,6 +13,13 @@ interface BoxProps {
   [key: string]: any;
 }
 
+interface ApiResponse {
+  success: boolean;
+  message: string;
+  code?: number;
+  type?: NotificationType;
+  data?: any;
+}
 interface ContractState {
   [functionName: string]: {
     functionSol: SolItem;

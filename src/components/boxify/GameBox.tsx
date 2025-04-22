@@ -22,11 +22,8 @@ const GameEntity = ({
 }) => {
   return (
     <div
-      className="overflow-hidden rounded-xl shadow-lg transition-all hover:shadow-xl"
+      className="overflow-hidden shadow-lg transition-all hover:shadow-xl"
       style={{
-        borderWidth: '2px',
-        borderStyle: 'solid',
-        borderColor: item.color,
         background: `linear-gradient(135deg, ${item.color}15, ${item.color}30)`
       }}
     >
@@ -274,11 +271,17 @@ function GameBox() {
           borderWidth: '4px',
         }}
       >
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
           {TOKENS.map((item) => (
             <div
               key={item.id}
               className={`${shouldLastItemSpanFull && item.id === TOKENS.length - 1 ? 'md:col-span-2 lg:col-span-3' : ''}`}
+              style={{
+                borderWidth: '2px',
+                borderStyle: 'solid',
+                borderColor: item.color,
+                borderRadius: shouldLastItemSpanFull && item.id === TOKENS.length - 1 ? '0 0 10px 10px' : '10px'
+              }}
             >
               <GameEntity
                 item={item}

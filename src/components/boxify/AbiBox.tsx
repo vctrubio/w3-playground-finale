@@ -344,7 +344,7 @@ const ContractABI = ({
         if (triggeredContract) {
             runExecute(triggeredContract);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [contractState]);
 
     if (!contract || !contract.abi) {
