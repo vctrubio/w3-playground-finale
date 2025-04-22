@@ -115,6 +115,7 @@ function GameBox() {
 
   //useEffect to migrate
 
+  //getUserBalancce from getItem in localstorage that EventBox sets
 
 
   //get contract instance and rules

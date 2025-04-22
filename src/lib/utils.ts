@@ -65,6 +65,28 @@ export function getTokenBalance(
   return balance;
 }
 
+// Utility function to calculate mint and burn amounts for each address and token
+export const calculateMintBurn = (
+  rawEvents: GameEvent[],
+  tokenId: number,
+  address: string
+) => {
+  let minted = 0;
+  let burned = 0;
+
+  rawEvents?.forEach((event) => {
+    if (event.tokenId === tokenId && event.address === address) {
+      if (event.type === "mint") {
+        minted += event.amount;
+      } else if (event.type === "burn") {
+        burned += event.amount;
+      }
+    }
+  });
+
+  return { minted, burned };
+};
+
 /**
  * Format token balance for display
  */

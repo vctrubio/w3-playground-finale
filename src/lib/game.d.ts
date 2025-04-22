@@ -4,7 +4,7 @@ interface TokenOwnership {
   total: number;
 }
 
-interface TokenOwnerships {
+export interface TokenOwnerships {
   [tokenId: number]: TokenOwnership[];
 }
 
