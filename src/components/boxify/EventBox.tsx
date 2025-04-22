@@ -4,6 +4,7 @@ import { getTokenById, calculateMintBurn } from "../../lib/utils";
 import { getLogs } from '../../lib/rpc-events';
 import { useNotifications } from '../../hooks/useNotifications';
 import { GameEvent, TokenOwnerships } from '../../lib/game';
+import { useGame } from '../../hooks/useGame';
 
 function initListener(contract: ethers.Contract, addEventCallback: (newEvent: GameEvent) => void, showNotification: any) {
     contract.on("Mint", (to: string, tokenId: number, amount: number, event: any) => {
@@ -59,6 +60,8 @@ function initListener(contract: ethers.Contract, addEventCallback: (newEvent: Ga
         addEventCallback(newEvent);
 
         // Dispatch a custom event that Game.tsx can listen to
+        // via   window.addEventListener("tokenUpdate", handler);
+        // and   return () => window.removeEventListener("tokenUpdate", handler);
         const tokenUpdateEvent = new CustomEvent("tokenUpdate", {
             detail: {
                 type: "burn",
@@ -70,6 +73,12 @@ function initListener(contract: ethers.Contract, addEventCallback: (newEvent: Ga
         window.dispatchEvent(tokenUpdateEvent);
     }
     );
+
+    // Return a cleanup function to remove listeners -- aka callback function
+    return () => {
+        contract.removeAllListeners("Mint");
+        contract.removeAllListeners("Burn");
+    };
 }
 
 function EventTable() {
@@ -82,11 +91,18 @@ function EventBox() {
     const { showNotification } = useNotifications();
     const [loading, setLoading] = useState<Record<string, boolean>>({});
     const [events, setEvents] = useState<GameEvent[]>([]);
-    const {eventsByTokenId} = useState<TokenOwnerships[]>([]);
-    
-    
-    
 
+    /*
+    todos: change the events inside the GameProvider. 
+    init the listener inside then. , 
+    have eventbox pass events to teh event table... 
+    also have Gamebox update teh tokens for each user
+
+    */
+
+    return (<>
+        hi lover
+    </>)
 }
 
 export default EventBox;

@@ -1,4 +1,4 @@
-import { GameEvent, GameToken, TOKENS } from "./game";
+import { GameEvent, GameToken, TOKENS } from "./game.d";
 
 export function getTokenById(id: number): GameToken | null {
   const token = TOKENS.find((t) => t.id === id);

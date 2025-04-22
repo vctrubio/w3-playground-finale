@@ -9,6 +9,7 @@ import AbiBox from "./components/boxify/AbiBox"
 import Notifications from "./components/Notifications"
 import GameBox from "./components/boxify/GameBox"
 import Footer from "./components/Footer"
+import EventBox from "./components/boxify/EventBox"
 
 const boxModules: BoxProps[] = [
   {
@@ -17,6 +18,14 @@ const boxModules: BoxProps[] = [
     theme: {
       dark: "bg-green-800",
       light: "bg-green-200",
+    },
+  },
+  {
+    label: "Contract Events",
+    component: EventBox,
+    theme: {
+      dark: "bg-purple-800",
+      light: "bg-purple-200",
     },
   },
   {
@@ -36,14 +45,7 @@ const boxModules: BoxProps[] = [
       light: "bg-blue-200",
     },
   },
-  {
-    label: "Contract Events",
-    component: Logo,
-    theme: {
-      dark: "bg-purple-800",
-      light: "bg-purple-200",
-    },
-  },
+
 
 ]
 
