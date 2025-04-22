@@ -34,7 +34,7 @@ export default function Notifications() {
           <div
             key={notification.id}
             className={`${bgColor} text-white p-4 rounded shadow-lg flex justify-between items-start 
-              ${isExiting ? 'animate-slide-out-right' : 'animate-slide-in-left'}`}
+              ${isExiting ? 'animate-slide-out-left' : 'animate-slide-in-left'}`}
           >
             <p className="flex-1">{notification.message}</p>
             <button
