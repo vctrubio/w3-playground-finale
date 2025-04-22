@@ -1,9 +1,9 @@
-import { useState, ReactNode, useEffect } from 'react';
-import { ethers } from 'ethers';
-import { GameContext } from './GameContextDef';
-import { initGameTheory } from '../lib/gameTheory';
-import { getWallet, hasMetamask, getUserByProvider } from '../lib/ethers';
-import { useNotifications } from '../hooks/useNotifications';
+import { useState, ReactNode, useEffect } from "react";
+import { ethers } from "ethers";
+import { GameContext } from "./GameContextDef";
+import { initGameTheory } from "../lib/gameTheory";
+import { getWallet, hasMetamask, getUserByProvider } from "../lib/ethers";
+import { useNotifications } from "../hooks/useNotifications";
 
 export const GameProvider = ({ children }: { children: ReactNode }) => {
     const [game, setGame] = useState<GameTheory | null>(null);
@@ -38,7 +38,10 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
                     showNotification(`Network changed to ${user.network.name}`, "info");
                 } catch (error) {
                     console.error("Error handling chain change:", error);
-                    showNotification(`Failed to update network: ${(error as Error).message}`, "error");
+                    showNotification(
+                        `Failed to update network: ${(error as Error).message}`,
+                        "error",
+                    );
                 }
             };
 
@@ -53,36 +56,33 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
                     }
 
                     // Only proceed if account actually changed
-                    if (game?.User?.address && accounts[0].toLowerCase() === game.User.address.toLowerCase()) {
+                    if (
+                        game?.User?.address &&
+                        accounts[0].toLowerCase() === game.User.address.toLowerCase()
+                    ) {
                         console.log("Same account selected, no change needed");
                         return;
                     }
 
-                    console.log("User changed account");
-                    const newUser = await getWallet();
-                    // we only need to update the game.User | Contract Logic stays the same
-                    if (newUser) {
-                        setGame((prevGame) => {
-                            if (!prevGame) return null;
-                            return {
-                                ...prevGame,
-                                User: newUser,
-                            };
-                        });
-                        showNotification(`Connected to account: ${accounts[0].substring(0, 6)}...`, "success");
-                    }
+                    await handleInitGameTheory();
                 } catch (error) {
                     console.error("Error handling account change:", error);
-                    showNotification(`Failed to switch account: ${(error as Error).message}`, "error");
+                    showNotification(
+                        `Failed to switch account: ${(error as Error).message}`,
+                        "error",
+                    );
                 }
             };
 
-            window.ethereum.on('chainChanged', handleChainChanged);
-            window.ethereum.on('accountsChanged', handleAccountsChanged);
+            window.ethereum.on("chainChanged", handleChainChanged);
+            window.ethereum.on("accountsChanged", handleAccountsChanged);
 
             return () => {
-                window.ethereum.removeListener('chainChanged', handleChainChanged);
-                window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
+                window.ethereum.removeListener("chainChanged", handleChainChanged);
+                window.ethereum.removeListener(
+                    "accountsChanged",
+                    handleAccountsChanged,
+                );
             };
         }
         //qs: should showNotification be here?
@@ -94,21 +94,26 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
             if (gameTheory) {
                 setGame(gameTheory);
             }
-            console.log("Game Theory initialized:", gameTheory);
+            showNotification(
+                `Welcome ${gameTheory?.User?.address.substring(0, 3)}...${gameTheory?.User?.address.substring(gameTheory?.User?.address.length - 2)}`,
+                "success",
+            );
             return gameTheory;
         } catch (error) {
-            console.error('Error initializing game theory:', error);
+            console.error("Error initializing game theory:", error);
             return null;
         }
     };
 
     return (
-        <GameContext.Provider value={{
-            game,
-            initGameTheory: handleInitGameTheory,
-            networkId: game?.User?.network.id,
-        }}>
+        <GameContext.Provider
+            value={{
+                game,
+                initGameTheory: handleInitGameTheory,
+                networkId: game?.User?.network.id,
+            }}
+        >
             {children}
         </GameContext.Provider>
     );
-}
+};

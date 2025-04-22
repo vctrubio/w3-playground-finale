@@ -1,28 +1,44 @@
 import { useNotifications } from '../hooks/useNotifications';
+import { useState } from 'react';
 
 export default function Notifications() {
   const { notifications, removeNotification } = useNotifications();
+  const [exitingIds, setExitingIds] = useState<string[]>([]);
+
+  // Handle notification removal with animation
+  const handleRemove = (id: string) => {
+    setExitingIds((prev) => [...prev, id]);
+    
+    // Wait for animation to complete before actually removing
+    setTimeout(() => {
+      removeNotification(id);
+      setExitingIds((prev) => prev.filter((exitId) => exitId !== id));
+    }, 300); // Match animation duration
+  };
 
   if (notifications.length === 0) return null;
 
   return (
-    <div className="fixed top-4 right-4 z-50 flex flex-col gap-2 max-w-md">
+    <div className="fixed top-4 left-4 z-50 flex flex-col gap-2 max-w-md">
       {notifications.map(notification => {
         // Set colors based on notification type
         const bgColor =
-          notification.type === 'success' ? 'bg-green-500 dark:bg-green-600' :
-            notification.type === 'error' ? 'bg-red-500 dark:bg-red-600' :
-              notification.type === 'warning' ? 'bg-yellow-500 dark:bg-yellow-600' :
+          notification.type === 'success' ? 'bg-emerald-500 dark:bg-emerald-600' :
+            notification.type === 'error' ? 'bg-fuchsia-500 dark:bg-fuchsia-600' :
+              notification.type === 'warning' ? 'bg-amber-500 dark:bg-amber-600' :
                 'bg-blue-500 dark:bg-blue-600';
 
+        const isExiting = exitingIds.includes(notification.id);
+        
         return (
           <div
             key={notification.id}
-            className={`${bgColor} text-white p-4 rounded shadow-lg flex justify-between items-start animate-fade-in`}
+            className={`${bgColor} text-white p-4 rounded shadow-lg flex justify-between items-start 
+              ${isExiting ? 'animate-slide-out-right' : 'animate-slide-in-left'}`}
           >
             <p className="flex-1">{notification.message}</p>
             <button
-              onClick={() => removeNotification(notification.id)}
+              onClick={() => handleRemove(notification.id)}
               className="ml-4 text-white hover:text-gray-200"
               aria-label="Close notification"
             >

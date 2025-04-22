@@ -7,7 +7,7 @@ export function hasMetamask() {
 }
 
 export async function getUserByProvider(
-  provider: ethers.BrowserProvider
+  provider: ethers.BrowserProvider,
 ): Promise<User> {
   const signer = await provider.getSigner();
   const address = await signer.getAddress();
@@ -45,9 +45,9 @@ export async function getWallet(): Promise<User | null> {
 export async function getContract(
   user: User,
   address: string,
-  abi: ethers.InterfaceAbi
+  abi: ethers.InterfaceAbi,
 ): Promise<Contract> {
-  const contract = new ethers.Contract(address, abi, user.provider);
+  const contract = new ethers.Contract(address, abi, user.signer);
   return {
     address,
     abi,

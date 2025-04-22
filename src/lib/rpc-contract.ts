@@ -21,7 +21,7 @@ export async function executeContract({
 
     const isRead = ["view", "pure"].includes(functionFragment.stateMutability);
     const isWrite = ["nonpayable", "payable"].includes(
-      functionFragment.stateMutability
+      functionFragment.stateMutability,
     );
 
     if (isRead) {
@@ -30,11 +30,13 @@ export async function executeContract({
       return result;
     } else if (isWrite) {
       console.log(`Executing write operation on contract: ${contract.address}`);
+      console.log(`Function name: ${functionName}`);
+      console.log(`Function args:`, functionArgs);
       const tx = await contract.instance[functionName](...functionArgs);
       return tx;
     } else {
       throw new Error(
-        `Unknown state mutability: ${functionFragment.stateMutability}`
+        `Unknown state mutability: ${functionFragment.stateMutability}`,
       );
     }
   } catch (e) {
