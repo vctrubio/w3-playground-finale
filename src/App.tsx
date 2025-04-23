@@ -12,11 +12,19 @@ import EventBox from "./components/boxify/EventBox"
 
 const boxModules: BoxProps[] = [
   {
-    label: "Game",
-    component: GameBox,
+    label: "User Profile",
+    component: UserBox,
     theme: {
-      dark: "bg-green-800",
-      light: "bg-green-200",
+      dark: "bg-blue-600",
+      light: "bg-blue-400",
+    },
+  },
+  {
+    label: "Contract ABI",
+    component: AbiBox,
+    theme: {
+      dark: "bg-blue-800",
+      light: "bg-blue-200",
     },
   },
   {
@@ -28,50 +36,40 @@ const boxModules: BoxProps[] = [
     },
   },
   {
-    label: "User Profile",
-    component: UserBox,
+    label: "Game",
+    component: GameBox,
     theme: {
-      dark: "bg-blue-600",
-      light: "bg-blue-400",
+      dark: "bg-green-800",
+      light: "bg-green-200",
     },
   },
-
-  {
-    label: "Contract ABI",
-    component: AbiBox,
-    theme: {
-      dark: "bg-blue-800",
-      light: "bg-blue-200",
-    },
-  },
-
 
 ]
 
 function App() {
-  const { game, initGameTheory } = useGame()
+  const { game } = useGame()
 
   //for dev purposes
-  useEffect(() => {
-    const init = async () => {
-      await initGameTheory()
-    }
+  // useEffect(() => {
+  //   const init = async () => {
+  //     await initGameTheory()
+  //   }
 
-    init()
-  }, [])
+  //   init()
+  // }, [])
 
 
   return (
     <div className="flex flex-col items-center justify-center gap-4">
       <Navbar />
       <Notifications />
-        {game ?
-          <div className="w-full max-w-4xl">
-            <BoxContainer modules={boxModules} />
-          </div>
-          :
-          (<Login />)
-        }
+      {game ?
+        <div className="w-full max-w-4xl">
+          <BoxContainer modules={boxModules} />
+        </div>
+        :
+        (<Login />)
+      }
       <Footer />
     </div>
   )

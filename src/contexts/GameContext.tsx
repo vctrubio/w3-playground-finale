@@ -95,6 +95,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
             };
         }
         //qs: should showNotification be here?
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [game?.User, showNotification]);
 
     const handleInitGameTheory = async (): Promise<GameTheory | null> => {
