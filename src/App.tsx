@@ -1,4 +1,3 @@
-import { useEffect } from "react"
 import { useGame } from "./hooks/useGame"
 import { Navbar } from "./components/Navbar"
 import { BoxContainer } from "./components/boxify/BoxInterface"
@@ -48,16 +47,6 @@ const boxModules: BoxProps[] = [
 
 function App() {
   const { game } = useGame()
-
-  //for dev purposes
-  // useEffect(() => {
-  //   const init = async () => {
-  //     await initGameTheory()
-  //   }
-
-  //   init()
-  // }, [])
-
 
   return (
     <div className="flex flex-col items-center justify-center gap-4">
