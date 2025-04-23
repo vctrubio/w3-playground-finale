@@ -13,7 +13,6 @@ import {
     mapBalanceOfToken
 } from "../lib/rpc-events";
 
-
 export const GameProvider = ({ children }: { children: ReactNode }) => {
     const [game, setGame] = useState<GameTheory | null>(null);
     const [events, setEvents] = useState<GameEvent[]>([]);
@@ -39,7 +38,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
                             ...prevGame,
                             User: {
                                 ...prevGame.User,
-                                provider: provider, // Update with fresh provider
+                                provider: provider,
                                 network: user.network,
                             },
                         };
@@ -113,10 +112,10 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
             const historicalEvents = await getFilterLogs(gameTheory.ContractSocket, gameTheory.User);
             if (historicalEvents.length > 0) {
-                setEvents(historicalEvents); // Set initial events
+                setEvents(historicalEvents);
                 showNotification(
                     `Fetched ${historicalEvents.length} historical events`,
-                    "info", // Changed to info to distinguish from live events
+                    "info",
                 )
             }
             setGame(gameTheory);
