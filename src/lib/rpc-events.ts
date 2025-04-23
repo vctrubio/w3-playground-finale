@@ -72,7 +72,7 @@ export function initListener(
       const msg = `${to.substring(0, 2)}...${to.substring(
         to.length - 3
       )} minted ${token.name}`;
-      console.log(msg);
+      console.log("------------||-----------", msg);
       showNotification(msg, "success", 5000);
 
       const newEvent: GameEvent = {
@@ -84,7 +84,6 @@ export function initListener(
         blockNumber: event.blockNumber,
       };
 
-      console.log("----------newEvent-----------", newEvent);
       addEventCallback(newEvent);
     }
   );
@@ -97,7 +96,7 @@ export function initListener(
       const msg = `${from.substring(0, 2)}...${from.substring(
         from.length - 3
       )} burned ${token.name}`;
-      console.log(msg);
+      console.log("-----------||----------", msg);
       showNotification(msg, "warning", 5000);
 
       const newEvent: GameEvent = {
@@ -109,7 +108,6 @@ export function initListener(
         blockNumber: event.blockNumber,
       };
 
-      console.log("----------newEvent-----------", newEvent);
       addEventCallback(newEvent);
     }
   );

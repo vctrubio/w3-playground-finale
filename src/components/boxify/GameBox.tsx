@@ -141,11 +141,13 @@ function GameBox() {
 
       console.log(`Mint result for ${item.name} (ID: ${item.id}):`, result);
 
-      if (result && result.hash) {
-        console.log(`Successfully minted ${item.name}! Transaction: ${result.hash}`);
-      } else {
-        console.log(`${item.name} minted successfully!`);
-      }
+      // no need for extra console logging
+      // if (result && result.hash) {
+      //   console.log(`Successfully minted ${item.name}! Transaction: ${result.hash}`);
+      // } else {
+      //   console.log(`${item.name} minted successfully!`);
+      // }
+      
     } catch (error) {
       console.error(`Error minting ${item.name} (ID: ${item.id}):`, error);
 

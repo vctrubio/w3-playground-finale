@@ -136,6 +136,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
     // Wrap pushEvent in useCallback to stabilize its reference for useEffect dependencies
     const pushEvent = useCallback((event: GameEvent) => {
+        console.log("Pushing event:", event);
         setEvents(prevEvents => {
             return [...prevEvents, event];
         });
@@ -143,20 +144,25 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
     useEffect(() => {
         if (game?.ContractSocket?.instance) {
+
             const cleanupListener = initListener(
                 game.ContractSocket.instance,
                 pushEvent,
                 showNotification
             );
 
-            // Return cleanup function
+            // Return cleanup function on unmount
             return () => {
                 console.log("Cleaning up event listener...");
                 cleanupListener();
             };
         }
-    }, [game?.ContractSocket?.instance, pushEvent, showNotification]); // Dependencies
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [game?.ContractSocket?.instance]); // Dependencies
+    // }, [game?.ContractSocket?.instance, pushEvent, showNotification]); // Dependencies
 
+
+    window.ev = events;
     return (
         <GameContext.Provider
             value={{
