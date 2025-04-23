@@ -120,35 +120,37 @@ export function initListener(
   };
 }
 
-
 /**
  * Maps user addresses to their token IDs with quantities
  * @param events All game events
  * @returns A map of addresses to {tokenId: quantity} objects
  */
-export function mapAddressToTokens(events: GameEvent[]): Record<string, Record<number, number>> {
+export function mapAddressToTokens(
+  events: GameEvent[]
+): Record<string, Record<number, number>> {
   const addressMap: Record<string, Record<number, number>> = {};
-  
+
   for (const event of events) {
     const address = event.address.toLowerCase();
     const tokenId = event.tokenId;
     const quantity = event.amount || 1;
     const isAddition = event.type === "mint";
-    
+
     // Initialize the address record if it doesn't exist
     if (!addressMap[address]) {
       addressMap[address] = {};
     }
-    
+
     // Add or subtract the quantity based on event type
-    addressMap[address][tokenId] = (addressMap[address][tokenId] || 0) + (isAddition ? quantity : -quantity);
-    
+    addressMap[address][tokenId] =
+      (addressMap[address][tokenId] || 0) + (isAddition ? quantity : -quantity);
+
     // Remove tokens with zero or negative balance
     if (addressMap[address][tokenId] <= 0) {
       delete addressMap[address][tokenId];
     }
   }
-  
+
   return addressMap;
 }
 
@@ -157,28 +159,36 @@ export function mapAddressToTokens(events: GameEvent[]): Record<string, Record<n
  * @param events All game events
  * @returns A map of tokenIds to {address: quantity} objects
  */
-export function mapTokenToAddresses(events: GameEvent[]): Record<number, Record<string, number>> {
+export function mapTokenToAddresses(
+  events: GameEvent[]
+): Record<number, Record<string, number>> {
+  // Revert to the simpler implementation returning the Record directly
   const tokenMap: Record<number, Record<string, number>> = {};
-  
+
   for (const event of events) {
     const address = event.address.toLowerCase();
     const tokenId = event.tokenId;
     const quantity = event.amount || 1;
     const isAddition = event.type === "mint";
-    
+
     if (!tokenMap[tokenId]) {
       tokenMap[tokenId] = {};
     }
-    
+
     // Add or subtract the quantity based on event type
-    tokenMap[tokenId][address] = (tokenMap[tokenId][address] || 0) + (isAddition ? quantity : -quantity);
-    
+    tokenMap[tokenId][address] =
+      (tokenMap[tokenId][address] || 0) + (isAddition ? quantity : -quantity);
+
     // Remove addresses with zero or negative balance
     if (tokenMap[tokenId][address] <= 0) {
       delete tokenMap[tokenId][address];
+      // If a token has no owners left, remove the token entry itself
+      if (Object.keys(tokenMap[tokenId]).length === 0) {
+        delete tokenMap[tokenId];
+      }
     }
   }
-  
+
   return tokenMap;
 }
 
@@ -190,15 +200,18 @@ export function mapTokenToAddresses(events: GameEvent[]): Record<number, Record<
  * @returns The token balance for the specified address
  */
 export function mapBalanceOfToken(
-  events: GameEvent[], 
-  address: string, 
+  events: GameEvent[],
+  address: string,
   tokenId: number
 ): number {
   let balance = 0;
   const lowerAddress = address.toLowerCase();
-  
+
   for (const event of events) {
-    if (event.address.toLowerCase() === lowerAddress && event.tokenId === tokenId) {
+    if (
+      event.address.toLowerCase() === lowerAddress &&
+      event.tokenId === tokenId
+    ) {
       if (event.type === "mint") {
         balance += event.amount;
       } else if (event.type === "burn") {
@@ -206,6 +219,6 @@ export function mapBalanceOfToken(
       }
     }
   }
-  
+
   return Math.max(0, balance); // Ensure we don't return negative balances
 }
