@@ -1,15 +1,13 @@
 import { hasMetamask } from "../lib/ethers";
-import { useGame } from "../hooks/useGame";
 
-function Login() {
-    const { initGameTheory } = useGame();
-
+// Add onLogin prop to the component
+function Login({ onLogin }: { onLogin: () => Promise<any> }) {
     return (
         <div className="flex flex-col items-center justify-center gap-4 h-screen">
             {hasMetamask() ? (
                 <div
                     className="p-6 cursor-pointer rounded-2xl hover:bg-gray-100/20 dark:hover:bg-gray-800/20 transition-colors"
-                    onClick={initGameTheory}
+                    onClick={onLogin} // Use the passed handler instead of directly using useGame
                 >
                     <button
                         className="p-3 px-6 border border-gray-300 dark:border-gray-600 rounded-xl 

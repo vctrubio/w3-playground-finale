@@ -42,11 +42,19 @@ const boxModules: BoxProps[] = [
       light: "bg-green-200",
     },
   },
-
 ]
 
 function App() {
-  const { game } = useGame()
+  const { game, initGameTheory } = useGame()
+
+  // Handle login with explicit user action
+  const handleLogin = async () => {
+    try {
+      await initGameTheory()
+    } catch (error) {
+      console.error("Login failed:", error)
+    }
+  }
 
   return (
     <div className="flex flex-col items-center justify-center gap-4">
@@ -57,7 +65,7 @@ function App() {
           <BoxContainer modules={boxModules} />
         </div>
         :
-        (<Login />)
+        (<Login onLogin={handleLogin} />)
       }
       <Footer />
     </div>
