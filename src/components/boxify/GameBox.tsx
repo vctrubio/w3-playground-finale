@@ -260,7 +260,6 @@ function GameBox() {
         <div>
           collect the collectables
         </div>
-        <div>xx</div>
       </div>
 
       <div className="p-6 max-w-5xl mx-auto border-l border-r border-b rounded-lg dark:bg-gray-800/30 bg-white/80"

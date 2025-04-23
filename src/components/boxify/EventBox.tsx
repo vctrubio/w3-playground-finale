@@ -2,6 +2,7 @@ import { useGame } from '../../hooks/useGame';
 import { mapTokenToAddresses } from '../../lib/rpc-events';
 import { getTokenById } from '../../lib/utils';
 import { GameEvent } from '../../lib/game';
+import { useState, useEffect } from 'react';
 
 interface TokenOwnership {
     address: string;
@@ -15,6 +16,18 @@ interface TokenOwnerships {
 function EventBox() {
     const { events, game } = useGame();
     const userAddress = game?.User.address;
+    const [isLoading, setIsLoading] = useState(true);
+
+    // Add effect to track when events are loaded
+    useEffect(() => {
+        if (events) {
+            // Give network events a moment to load
+            const timer = setTimeout(() => {
+                setIsLoading(false);
+            }, 2500);
+            return () => clearTimeout(timer);
+        }
+    }, [events]);
 
     // Calculate token ownership
     const rawTokenEvents: Record<number, Record<string, number>> = events ? mapTokenToAddresses(events) : {};
@@ -63,7 +76,12 @@ function EventBox() {
 
     return (
         <div className="mt-4">
-            {Object.keys(tokenEvents).length === 0 ? (
+            {isLoading ? (
+                <div className="flex justify-center items-center py-8">
+                    <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                    <p className="ml-2">Loading events...</p>
+                </div>
+            ) : Object.keys(tokenEvents).length === 0 ? (
                 <p>No token events found</p>
             ) : (
                 <div className="overflow-x-auto">
