@@ -5,12 +5,12 @@ import { initGameTheory } from "../lib/gameTheory";
 import { hasMetamask, getUserByProvider } from "../lib/ethers";
 import { useNotifications } from "../hooks/useNotifications";
 import { GameEvent, GameTheory } from "../lib/game";
-import { 
-    getFilterLogs, 
-    initListener, 
-    mapAddressToTokens, 
-    mapTokenToAddresses, 
-    mapBalanceOfToken 
+import {
+    getFilterLogs,
+    initListener,
+    mapAddressToTokens,
+    mapTokenToAddresses,
+    mapBalanceOfToken
 } from "../lib/rpc-events";
 
 
@@ -118,13 +118,17 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     const handleInitGameTheory = async (): Promise<GameTheory | null> => {
         try {
             const gameTheory = await initGameTheory();
-            if (gameTheory) {
-                setGame(gameTheory);
+            if (!gameTheory) {
+                showNotification("Failed to initialize game theory", "error");
+                showNotification("Please contact vctrubio@gmail.com", "warning");
+                return null;
             }
             showNotification(
                 `Welcome ${gameTheory?.User?.address.substring(0, 3)}...${gameTheory?.User?.address.substring(gameTheory?.User?.address.length - 2)}`,
                 "success",
             );
+
+            setGame(gameTheory);
 
             const events = await getFilterLogs(gameTheory.ContractSocket, gameTheory.User);
             if (events.length > 0) {
@@ -134,7 +138,6 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
                     "success",
                 )
             }
-
             return gameTheory;
         } catch (error) {
             console.error("Error initializing game theory:", error);
@@ -146,7 +149,6 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         setEvents(prevEvents => [...prevEvents, event]);
     };
 
-    window.e = events;
     return (
         <GameContext.Provider
             value={{
@@ -158,7 +160,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
                 // Add the mapping functions from rpc-events
                 mapAddressToTokens: () => mapAddressToTokens(events),
                 mapTokenToAddresses: () => mapTokenToAddresses(events),
-                mapBalanceOfToken: (address: string, tokenId: number) => 
+                mapBalanceOfToken: (address: string, tokenId: number) =>
                     mapBalanceOfToken(events, address, tokenId),
             }}
         >

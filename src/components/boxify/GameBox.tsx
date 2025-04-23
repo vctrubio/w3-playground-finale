@@ -1,10 +1,8 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState } from 'react';
 import { useGame } from '../../hooks/useGame';
 import { useNotifications } from '../../hooks/useNotifications';
 import { TOKENS, GameToken } from '../../lib/game.d'; // Import TOKENS from game.d.ts
 import { executeContract } from '../../lib/rpc-contract';
-import { getTokenBalance } from '../../lib/utils';
-import { GameContext } from '../../contexts/GameContextDef';
 
 const GameEntity = ({
   item,

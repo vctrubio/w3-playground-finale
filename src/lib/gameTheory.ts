@@ -2,6 +2,7 @@ import { ethers } from "ethers";
 import { hasMetamask, getContract, getUserByProvider } from "./ethers";
 import ErikContract from "../../contracts/Erik.json";
 import ErikForge from "../../contracts/ErikForge.json";
+import { GameTheory } from "./game";
 
 async function getContractParent(user: User): Promise<Contract> {
   const contract = await getContract(
