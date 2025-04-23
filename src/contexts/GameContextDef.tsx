@@ -1,8 +1,9 @@
 import { createContext } from 'react';
-import { GameEvent } from '../lib/game';
+import { GameEvent, GameTheory } from '../lib/game';
 interface GameContextType {
     game: GameTheory | null;
     events: GameEvent[];
+    pushEvent: (event: GameEvent) => void;
     initGameTheory: () => Promise<GameTheory | null>;
     networkId: string | undefined;
 }

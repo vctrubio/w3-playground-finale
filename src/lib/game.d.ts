@@ -1,13 +1,10 @@
-//to be testted tokenownership
-interface TokenOwnership {
-  address: string;
-  total: number;
-}
-
-export interface TokenOwnerships {
-  [tokenId: number]: TokenOwnership[];
-}
-
+type GameTheory = {
+  User: User;
+  ContractParent: Contract;
+  ContractForge: Contract;
+  ContractSocket: Contract;
+  Events: GameEvent[];
+};
 export interface GameEvent {
   address: string;
   tokenId: number;

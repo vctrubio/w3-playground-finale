@@ -4,97 +4,10 @@ import { GameContext } from "./GameContextDef";
 import { initGameTheory } from "../lib/gameTheory";
 import { hasMetamask, getUserByProvider } from "../lib/ethers";
 import { useNotifications } from "../hooks/useNotifications";
-import { GameEvent } from "../lib/game";
-import { getTokenById } from "../lib/utils";
-import { getLogs } from "../lib/rpc-events";
+import { GameEvent, GameTheory } from "../lib/game";
+import { getFilterLogs, initListener } from "../lib/rpc-events";
 
-function initListener(
-    contract: ethers.Contract,
-    addEventCallback: (newEvent: GameEvent) => void,
-    showNotification: any
-) {
-    contract.on(
-        "Mint",
-        (to: string, tokenId: number, amount: number, event: any) => {
-            const token = getTokenById(Number(tokenId));
-            if (!token) return;
-            const msg = `${to.substring(0, 2)}...${to.substring(
-                to.length - 3
-            )} minted ${token.name}`;
-            console.log(msg);
-            showNotification(msg, "success", 5000);
 
-            const newEvent: GameEvent = {
-                address: to,
-                tokenId: Number(tokenId),
-                amount: Number(amount),
-                type: "mint",
-                transactionHash: event.transactionHash,
-                blockNumber: event.blockNumber,
-            };
-
-            addEventCallback(newEvent);
-
-            // Dispatch a custom event that Game.tsx can listen to
-            const tokenUpdateEvent = new CustomEvent("tokenUpdate", {
-                detail: {
-                    type: "mint",
-                    address: to,
-                    tokenId: Number(tokenId),
-                    amount: Number(amount),
-                },
-            });
-            window.dispatchEvent(tokenUpdateEvent);
-        }
-    );
-
-    contract.on(
-        "Burn",
-        (from: string, tokenId: number, amount: number, event: any) => {
-            const token = getTokenById(Number(tokenId));
-            if (!token) return;
-            const msg = `${from.substring(0, 2)}...${from.substring(
-                from.length - 3
-            )} burned ${token.name}`;
-            console.log(msg);
-            showNotification(msg, "warning", 5000);
-
-            const newEvent: GameEvent = {
-                address: from,
-                tokenId: Number(tokenId),
-                amount: Number(amount),
-                type: "burn",
-                transactionHash: event.transactionHash,
-                blockNumber: event.blockNumber,
-            };
-
-            addEventCallback(newEvent);
-
-            // Dispatch a custom event that Game.tsx can listen to // to be decided
-            // this can be done through window.EventListener ... 
-            const tokenUpdateEvent = new CustomEvent("tokenUpdate", {
-                detail: {
-                    type: "burn",
-                    address: from,
-                    tokenId: Number(tokenId),
-                    amount: Number(amount),
-                },
-            });
-            window.dispatchEvent(tokenUpdateEvent);
-        }
-    );
-
-    // Return a cleanup function to remove listeners
-    return () => {
-        contract.removeAllListeners("Mint");
-        contract.removeAllListeners("Burn");
-    };
-}
-
-//we have the events, but now we ned to sort them by token id, and by user address
-//todo and to think
-
-//getFilterLogs that returns events.... and then what.
 //in initGameTheory or handle game theory we need to pass a param, that will be null if user doesnt ecxist. ie on the first mount,
 // -- this, if user is changed. we dont need the socket to change, if the socket doesnt change, then we dont need to reint the listener or the filterlogs....
 export const GameProvider = ({ children }: { children: ReactNode }) => {
@@ -104,7 +17,6 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
     useEffect(() => {
         console.log("GameProvider mounted");
-
     }, []);
 
     useEffect(() => {
@@ -182,6 +94,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         //qs: should showNotification be here?
     }, [game?.User, showNotification]);
 
+    //when there is a new contractsocket (which there should not be) -- initListener, to se events
     useEffect(() => {
         if (game?.ContractSocket?.instance) {
             const addNewEvent = (newEvent: GameEvent) => {
@@ -206,6 +119,12 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
                 `Welcome ${gameTheory?.User?.address.substring(0, 3)}...${gameTheory?.User?.address.substring(gameTheory?.User?.address.length - 2)}`,
                 "success",
             );
+
+            const events = await getFilterLogs(gameTheory.ContractSocket.instance, gameTheory.User);
+            if (events.length > 0)
+                setEvents(events);
+            console.log('what do i do with these events:...', events);
+
             return gameTheory;
         } catch (error) {
             console.error("Error initializing game theory:", error);
@@ -213,13 +132,17 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
-    window.ge = events;
+    const pushEvent = (event: GameEvent) => {
+        setEvents(prevEvents => [...prevEvents, event]);
+    };
 
+    window.e = events;
     return (
         <GameContext.Provider
             value={{
                 game,
                 events,
+                pushEvent,
                 initGameTheory: handleInitGameTheory,
                 networkId: game?.User?.network.id,
             }}

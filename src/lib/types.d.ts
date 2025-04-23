@@ -20,11 +20,4 @@ type Contract = {
   name?: string;
 };
 
-type GameTheory = {
-  User: User;
-  ContractParent: Contract;
-  ContractForge: Contract;
-  ContractSocket: Contract;
-};
-
 type NotificationType = "success" | "error" | "warning" | "info";
