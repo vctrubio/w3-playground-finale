@@ -1,4 +1,4 @@
-import { useState, ReactNode, useEffect } from "react";
+import { useState, ReactNode, useEffect, useCallback } from "react";
 import { ethers } from "ethers";
 import { GameContext } from "./GameContextDef";
 import { initGameTheory } from "../lib/gameTheory";
@@ -14,8 +14,6 @@ import {
 } from "../lib/rpc-events";
 
 
-//in initGameTheory or handle game theory we need to pass a param, that will be null if user doesnt ecxist. ie on the first mount,
-// -- this, if user is changed. we dont need the socket to change, if the socket doesnt change, then we dont need to reint the listener or the filterlogs....
 export const GameProvider = ({ children }: { children: ReactNode }) => {
     const [game, setGame] = useState<GameTheory | null>(null);
     const [events, setEvents] = useState<GameEvent[]>([]);
@@ -100,21 +98,6 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         //qs: should showNotification be here?
     }, [game?.User, showNotification]);
 
-    //when there is a new contractsocket (which there should not be) -- initListener, to se events
-    useEffect(() => {
-        if (game?.ContractSocket?.instance) {
-            const addNewEvent = (newEvent: GameEvent) => {
-                setEvents(prevEvents => [...prevEvents, newEvent]);
-            };
-
-            const cleanup = initListener(game.ContractSocket.instance, addNewEvent, showNotification);
-
-            return () => {
-                if (cleanup) cleanup();
-            };
-        }
-    }, [game?.ContractSocket?.instance, showNotification]);
-
     const handleInitGameTheory = async (): Promise<GameTheory | null> => {
         try {
             const gameTheory = await initGameTheory();
@@ -128,26 +111,51 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
                 "success",
             );
 
-            setGame(gameTheory);
-
-            const events = await getFilterLogs(gameTheory.ContractSocket, gameTheory.User);
-            if (events.length > 0) {
-                setEvents(events);
+            const historicalEvents = await getFilterLogs(gameTheory.ContractSocket, gameTheory.User);
+            if (historicalEvents.length > 0) {
+                setEvents(historicalEvents); // Set initial events
                 showNotification(
-                    `Fetched ${events.length} events from the blockchain`,
-                    "success",
+                    `Fetched ${historicalEvents.length} historical events`,
+                    "info", // Changed to info to distinguish from live events
                 )
             }
+            setGame(gameTheory);
+
             return gameTheory;
         } catch (error) {
             console.error("Error initializing game theory:", error);
+            setGame(null);
+            setEvents([]);
+            showNotification(
+                `Initialization failed: ${(error as Error).message}`,
+                "error",
+            );
             return null;
         }
     };
 
-    const pushEvent = (event: GameEvent) => {
-        setEvents(prevEvents => [...prevEvents, event]);
-    };
+    // Wrap pushEvent in useCallback to stabilize its reference for useEffect dependencies
+    const pushEvent = useCallback((event: GameEvent) => {
+        setEvents(prevEvents => {
+            return [...prevEvents, event];
+        });
+    }, []); // setEvents is stable
+
+    useEffect(() => {
+        if (game?.ContractSocket?.instance) {
+            const cleanupListener = initListener(
+                game.ContractSocket.instance,
+                pushEvent,
+                showNotification
+            );
+
+            // Return cleanup function
+            return () => {
+                console.log("Cleaning up event listener...");
+                cleanupListener();
+            };
+        }
+    }, [game?.ContractSocket?.instance, pushEvent, showNotification]); // Dependencies
 
     return (
         <GameContext.Provider
@@ -157,7 +165,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
                 pushEvent,
                 initGameTheory: handleInitGameTheory,
                 networkId: game?.User?.network.id,
-                // Add the mapping functions from rpc-events
+                // mapping functions from rpc-eventse
                 mapAddressToTokens: () => mapAddressToTokens(events),
                 mapTokenToAddresses: () => mapTokenToAddresses(events),
                 mapBalanceOfToken: (address: string, tokenId: number) =>

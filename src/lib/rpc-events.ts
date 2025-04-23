@@ -63,6 +63,7 @@ export function initListener(
   addEventCallback: (newEvent: GameEvent) => void,
   showNotification: any
 ) {
+  console.log("Initializing event listeners...");
   contract.on(
     "Mint",
     (to: string, tokenId: number, amount: number, event: any) => {
