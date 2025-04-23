@@ -120,10 +120,15 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
                 "success",
             );
 
-            const events = await getFilterLogs(gameTheory.ContractSocket.instance, gameTheory.User);
-            if (events.length > 0)
+            const events = await getFilterLogs(gameTheory.ContractSocket, gameTheory.User);
+            if (events.length > 0) {
                 setEvents(events);
-            console.log('what do i do with these events:...', events);
+                showNotification(
+                    `Fetched ${events.length} events from the blockchain`,
+                    "success",
+                )
+            }
+
 
             return gameTheory;
         } catch (error) {
