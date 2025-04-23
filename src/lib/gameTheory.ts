@@ -28,7 +28,7 @@ async function getContractForge(user: User): Promise<Contract> {
 
 async function getContractSocket(contract: Contract): Promise<Contract> {
   const wsProvider = new ethers.WebSocketProvider(
-    `wss://mainnet.infura.io/ws/v3/${import.meta.env.VITE_INFURA_PROJECT_ID}`
+    `wss://sepolia.infura.io/ws/v3/${import.meta.env.VITE_INFURA_PROJECT_ID}`
   );
   const contractSocket = new ethers.Contract(
     contract.address,

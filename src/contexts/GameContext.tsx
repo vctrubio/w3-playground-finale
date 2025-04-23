@@ -158,11 +158,8 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
             };
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [game?.ContractSocket?.instance]); // Dependencies
-    // }, [game?.ContractSocket?.instance, pushEvent, showNotification]); // Dependencies
+    }, [game?.ContractSocket?.instance]);
 
-
-    window.ev = events;
     return (
         <GameContext.Provider
             value={{
