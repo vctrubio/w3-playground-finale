@@ -13,6 +13,21 @@ const BUSINESS_CARD_SECTIONS: BusinessCardSection[] = [
     content: "A project for Metana Module 3 Web3 Bootcamp"
   },
   {
+    title: "Gameplay",
+    icon: "🎮",
+    content: (
+      <div>
+        This game requires Sepolia to interact with it. 
+        <a href="https://www.alchemy.com/faucets/ethereum-sepolia" 
+           className="text-blue-500 hover:underline hover:text-blue-600 transition-colors ml-1" 
+           target="_blank" 
+           rel="noopener noreferrer">
+          Click here
+        </a> if you want some free tokens.
+      </div>
+    )
+  },
+  {
     title: "About Me",
     icon: "👨‍💻",
     content: "Full stack developer with emphasis on backend development"
