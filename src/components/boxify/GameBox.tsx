@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useGame } from '../../hooks/useGame';
 import { useNotifications } from '../../hooks/useNotifications';
 import { TOKENS, GameToken } from '../../lib/game.d'; // Import TOKENS from game.d.ts
 import { executeContract } from '../../lib/rpc-contract';
 import { getTokenBalance } from '../../lib/utils';
+import { GameContext } from '../../contexts/GameContextDef';
 
 const GameEntity = ({
   item,
@@ -105,7 +106,7 @@ const GameEntity = ({
 };
 
 function GameBox() {
-  const { game } = useGame();
+  const { game, mapBalanceOfToken } = useGame();
   const { showNotification } = useNotifications();
   const [loading, setLoading] = useState<Record<string, boolean>>({});
 
@@ -113,10 +114,8 @@ function GameBox() {
     return <div className="text-center">No game data available</div>;
   }
 
-  //useEffect to migrate
-
-  //getUserBalancce from getItem in localstorage that EventBox sets
-
+  // Get user address from the game object
+  const userAddress = game.User?.address || '';
 
   //get contract instance and rules
   const contract = game.ContractForge;
@@ -290,8 +289,7 @@ function GameBox() {
                 onBurn={handleBurn}
                 canBurn={canBurnItem(item.id)}
                 loading={loading[`mint-${item.id}`] || loading[`burn-${item.id}`] || false}
-                userBalance={0}
-              // userBalance={balances[item.id] || 0}
+                userBalance={mapBalanceOfToken?.(userAddress, item.id) || 0}
               />
             </div>
           ))}

@@ -5,7 +5,13 @@ import { initGameTheory } from "../lib/gameTheory";
 import { hasMetamask, getUserByProvider } from "../lib/ethers";
 import { useNotifications } from "../hooks/useNotifications";
 import { GameEvent, GameTheory } from "../lib/game";
-import { getFilterLogs, initListener } from "../lib/rpc-events";
+import { 
+    getFilterLogs, 
+    initListener, 
+    mapAddressToTokens, 
+    mapTokenToAddresses, 
+    mapBalanceOfToken 
+} from "../lib/rpc-events";
 
 
 //in initGameTheory or handle game theory we need to pass a param, that will be null if user doesnt ecxist. ie on the first mount,
@@ -129,7 +135,6 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
                 )
             }
 
-
             return gameTheory;
         } catch (error) {
             console.error("Error initializing game theory:", error);
@@ -150,6 +155,11 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
                 pushEvent,
                 initGameTheory: handleInitGameTheory,
                 networkId: game?.User?.network.id,
+                // Add the mapping functions from rpc-events
+                mapAddressToTokens: () => mapAddressToTokens(events),
+                mapTokenToAddresses: () => mapTokenToAddresses(events),
+                mapBalanceOfToken: (address: string, tokenId: number) => 
+                    mapBalanceOfToken(events, address, tokenId),
             }}
         >
             {children}

@@ -10,12 +10,11 @@ export async function getLogs(
   return raw;
 }
 
-//get Mint and Burn logs from the contract
+//get Mint and Burn logs from the contract -- for the initialization of the game
 export async function getFilterLogs(
   contract: Contract,
   user: User
 ): Promise<GameEvent[]> {
-  console.log('can u heear meee...:?')
   const filterMint: ethers.Filter = {
     address: contract.address,
     fromBlock: 0,
@@ -86,18 +85,6 @@ export function initListener(
 
       console.log("----------newEvent-----------", newEvent);
       addEventCallback(newEvent);
-
-      //-- try without
-      // Dispatch a custom event that Game.tsx can listen to
-      // const tokenUpdateEvent = new CustomEvent("tokenUpdate", {
-      //   detail: {
-      //     type: "mint",
-      //     address: to,
-      //     tokenId: Number(tokenId),
-      //     amount: Number(amount),
-      //   },
-      // });
-      // window.dispatchEvent(tokenUpdateEvent);
     }
   );
 
@@ -123,18 +110,6 @@ export function initListener(
 
       console.log("----------newEvent-----------", newEvent);
       addEventCallback(newEvent);
-
-      // Dispatch a custom event that Game.tsx can listen to // to be decided
-      // this can be done through window.EventListener ...
-      // const tokenUpdateEvent = new CustomEvent("tokenUpdate", {
-      //   detail: {
-      //     type: "burn",
-      //     address: from,
-      //     tokenId: Number(tokenId),
-      //     amount: Number(amount),
-      //   },
-      // });
-      // window.dispatchEvent(tokenUpdateEvent);
     }
   );
 
@@ -143,4 +118,94 @@ export function initListener(
     contract.removeAllListeners("Mint");
     contract.removeAllListeners("Burn");
   };
+}
+
+
+/**
+ * Maps user addresses to their token IDs with quantities
+ * @param events All game events
+ * @returns A map of addresses to {tokenId: quantity} objects
+ */
+export function mapAddressToTokens(events: GameEvent[]): Record<string, Record<number, number>> {
+  const addressMap: Record<string, Record<number, number>> = {};
+  
+  for (const event of events) {
+    const address = event.address.toLowerCase();
+    const tokenId = event.tokenId;
+    const quantity = event.amount || 1;
+    const isAddition = event.type === "mint";
+    
+    // Initialize the address record if it doesn't exist
+    if (!addressMap[address]) {
+      addressMap[address] = {};
+    }
+    
+    // Add or subtract the quantity based on event type
+    addressMap[address][tokenId] = (addressMap[address][tokenId] || 0) + (isAddition ? quantity : -quantity);
+    
+    // Remove tokens with zero or negative balance
+    if (addressMap[address][tokenId] <= 0) {
+      delete addressMap[address][tokenId];
+    }
+  }
+  
+  return addressMap;
+}
+
+/**
+ * Maps token IDs to the addresses that own them with quantities
+ * @param events All game events
+ * @returns A map of tokenIds to {address: quantity} objects
+ */
+export function mapTokenToAddresses(events: GameEvent[]): Record<number, Record<string, number>> {
+  const tokenMap: Record<number, Record<string, number>> = {};
+  
+  for (const event of events) {
+    const address = event.address.toLowerCase();
+    const tokenId = event.tokenId;
+    const quantity = event.amount || 1;
+    const isAddition = event.type === "mint";
+    
+    if (!tokenMap[tokenId]) {
+      tokenMap[tokenId] = {};
+    }
+    
+    // Add or subtract the quantity based on event type
+    tokenMap[tokenId][address] = (tokenMap[tokenId][address] || 0) + (isAddition ? quantity : -quantity);
+    
+    // Remove addresses with zero or negative balance
+    if (tokenMap[tokenId][address] <= 0) {
+      delete tokenMap[tokenId][address];
+    }
+  }
+  
+  return tokenMap;
+}
+
+/**
+ * Get the balance of a specific token for an address
+ * @param events All game events
+ * @param address The user's address
+ * @param tokenId The token ID to check balance for
+ * @returns The token balance for the specified address
+ */
+export function mapBalanceOfToken(
+  events: GameEvent[], 
+  address: string, 
+  tokenId: number
+): number {
+  let balance = 0;
+  const lowerAddress = address.toLowerCase();
+  
+  for (const event of events) {
+    if (event.address.toLowerCase() === lowerAddress && event.tokenId === tokenId) {
+      if (event.type === "mint") {
+        balance += event.amount;
+      } else if (event.type === "burn") {
+        balance -= event.amount;
+      }
+    }
+  }
+  
+  return Math.max(0, balance); // Ensure we don't return negative balances
 }
