@@ -294,15 +294,14 @@ function GameBox() {
           fontFamily: 'cursive',
           letterSpacing: '4px',
           display: 'flex',
-          justifyContent: 'space-between',
+          justifyContent: 'space-around',
           gap: '0.5rem',
         }}
       >
-        <div>a</div>
-        <div>play</div>
+        <div>collect the collectables -- or --</div>
         <div
           onClick={handleTradeClick}
-          className="cursor-pointer px-2 py-1 border rounded transition-colors duration-200 dark:border-gray-700 border-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800"
+          className="cursor-pointer px-2 border rounded transition-colors duration-200 dark:border-gray-700 border-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800"
         >
           trade this
         </div>
