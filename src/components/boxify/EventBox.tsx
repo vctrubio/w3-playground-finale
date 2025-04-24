@@ -82,7 +82,7 @@ function EventBox() {
                     <p className="ml-2">Loading events...</p>
                 </div>
             ) : Object.keys(tokenEvents).length === 0 ? (
-                <p>No token events found</p>
+                <p>No token events found-- please refresh</p>
             ) : (
                 <div className="overflow-x-auto">
                     <table className="min-w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
