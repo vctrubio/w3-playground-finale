@@ -11,7 +11,8 @@ const GameEntity = ({
   onBurn,
   canBurn,
   loading,
-  userBalance
+  userBalance,
+  cooldownActive
 }: {
   item: GameToken;
   onMint: (item: GameToken) => void;
@@ -19,6 +20,7 @@ const GameEntity = ({
   canBurn: boolean;
   loading: boolean;
   userBalance: number;
+  cooldownActive?: boolean;
 }) => {
   return (
     <div
@@ -58,7 +60,7 @@ const GameEntity = ({
         <div className="flex gap-2 mt-2">
           <button
             onClick={() => onMint(item)}
-            disabled={loading}
+            disabled={loading || cooldownActive}
             className="flex-1 py-2 px-4 rounded-lg font-medium text-white transition-all relative overflow-hidden group"
             style={{
               backgroundColor: `${item.color}`,
@@ -66,7 +68,7 @@ const GameEntity = ({
             }}
           >
             <div className="absolute inset-0 w-full h-full transition-all duration-300 ease-out bg-white opacity-0 group-hover:opacity-20"></div>
-            {loading ? (
+            {cooldownActive ? <Cooldown active={cooldownActive} /> : loading ? (
               <div className="flex justify-center items-center">
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
               </div>
@@ -111,6 +113,7 @@ function GameBox() {
   const [showTradeModal, setShowTradeModal] = useState(false);
   const [selectedToken, setSelectedToken] = useState<GameToken | null>(null);
   const [targetTokenId, setTargetTokenId] = useState<number | null>(null);
+  const [cooldowns, setCooldowns] = useState<Record<number, boolean>>({});
 
   if (!game) {
     return <div className="text-center">No game data available</div>;
@@ -141,6 +144,11 @@ function GameBox() {
 
       console.log(`Mint result for ${item.name} (ID: ${item.id}):`, result);
 
+      // On successful mint, start cooldown for this token
+      setCooldowns((prev) => ({ ...prev, [item.id]: true }));
+      setTimeout(() => {
+        setCooldowns((prev) => ({ ...prev, [item.id]: false }));
+      }, 5000); // 5 seconds cooldown
     } catch (error) {
       console.error(`Error minting ${item.name} (ID: ${item.id}):`, error);
 
@@ -299,7 +307,7 @@ function GameBox() {
           gap: '0.5rem',
         }}
       >
-        <div>collect the collectables <Cooldown/></div>
+        <div>collect the collectables <Cooldown active={Object.values(cooldowns).some(Boolean)} /></div>
         <div
           onClick={handleTradeClick}
           className="cursor-pointer px-2 border rounded transition-colors duration-200 dark:border-gray-700 border-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800"
@@ -414,6 +422,7 @@ function GameBox() {
                 canBurn={canBurnItem(item.id)}
                 loading={loading[`mint-${item.id}`] || loading[`burn-${item.id}`] || false}
                 userBalance={mapBalanceOfToken?.(userAddress, item.id) || 0}
+                cooldownActive={!!cooldowns[item.id]}
               />
             </div>
           ))}
