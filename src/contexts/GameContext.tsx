@@ -1,8 +1,7 @@
 import { useState, ReactNode, useEffect, useCallback } from "react";
-import { ethers } from "ethers";
 import { GameContext } from "./GameContextDef";
 import { initGameTheory } from "../lib/gameTheory";
-import { hasMetamask, getUserByProvider } from "../lib/ethers";
+import { hasMetamask} from "../lib/ethers";
 import { useNotifications } from "../hooks/useNotifications";
 import { GameEvent, GameTheory } from "../lib/game";
 import {
