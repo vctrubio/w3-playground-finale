@@ -29,22 +29,8 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
                 try {
                     if (!game?.User?.provider) return;
 
-                    const provider = new ethers.BrowserProvider(window.ethereum);
-                    const user = await getUserByProvider(provider);
+                    await handleInitGameTheory();
 
-                    setGame((prevGame) => {
-                        if (!prevGame) return null;
-                        return {
-                            ...prevGame,
-                            User: {
-                                ...prevGame.User,
-                                provider: provider,
-                                network: user.network,
-                            },
-                        };
-                    });
-
-                    showNotification(`Network changed to ${user.network.name}`, "info");
                 } catch (error) {
                     console.error("Error handling chain change:", error);
                     showNotification(
