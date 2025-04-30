@@ -3,6 +3,7 @@ import { useGame } from '../../hooks/useGame';
 import { useNotifications } from '../../hooks/useNotifications';
 import { TOKENS, GameToken } from '../../lib/game.d'; // Import TOKENS from game.d.ts
 import { executeContract } from '../../lib/rpc-contract';
+import Cooldown from '../Cooldown';
 
 const GameEntity = ({
   item,
@@ -298,7 +299,7 @@ function GameBox() {
           gap: '0.5rem',
         }}
       >
-        <div>collect the collectables -- or --</div>
+        <div>collect the collectables <Cooldown/></div>
         <div
           onClick={handleTradeClick}
           className="cursor-pointer px-2 border rounded transition-colors duration-200 dark:border-gray-700 border-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800"
